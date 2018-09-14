@@ -17,6 +17,9 @@ fs.writeFile("./www/1.txt", "祈祷", function(err) {
 res = fs.readFileSync("./www/huang.txt");
 console.log(res.toString());
 
+res = fs.readFileSync("./www/huang.txt", "utf8");
+console.log(res);
+
 // 异步读
 fs.readFile("./www/1.txt", function(err, data){
     if(err){
@@ -24,4 +27,11 @@ fs.readFile("./www/1.txt", function(err, data){
     }else{
         console.log(data.toString());
     }
-})
+});
+fs.readFile("./www/1.txt", "utf8", function(err, data){
+    if(err){
+        throw err;
+    }else{
+        console.log(data);
+    }
+});
