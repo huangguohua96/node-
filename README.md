@@ -53,11 +53,12 @@
 #### (2)http模块和url模块
     `
     const http = require("http"); //获取http模块  
-    const url = require("url");
+    const url = require("url"); //url模块用于解析访问路径和数据
     //定义回调函数
     function start(){
         function onRequest(request, response) {
-            let pathName = url.parse(request.url).pathname; //获取url路径
+            let pathName = url.parse(request.url,true).pathname; //获取url路径
+            let query = url.parse(request.url, true).query; //获取用户请求数据
             response.writeHead("Content-Type": "text/plain");   //设置响应头
             response.write("Hello World!"); //相应主体
             response.end(); //完成响应  
@@ -71,5 +72,24 @@
 
     `
 #### (3)定义router模块和requestHandlers模块
+
+#### (4)querystring模块和url模块
+    `querystring.parse(str) //将字符串解析成json（解析POST数据）`  
+    `urlLib.parse(req.url, true)    //将字符串解析成json(解析get数据)`
+
+#### (5)POST数据请求
+    ` 
+    http.createServer(function(req, res){
+        //POST数据请求(post 数据很大时会被分成多段进行传输)
+        // data --有一段数据到达的时候触发（多次）
+        var str = '';
+        req.on("data", function(data) { str+=data; })
+
+        //end --数据全部到达（一次）
+        req.on("end", function() {})
+    })
+    `
+
+
 
             

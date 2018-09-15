@@ -1,18 +1,21 @@
-const exec = require("child_process").exec; //  异步
-
-function start(response) {
+//const exec = require("child_process").exec; //  异步
+const fs = require("fs");
+function start(response, url) {
     console.log("Request handler 'start' was called!");
+    console.log(url.query)
 
-    exec("find /", 
-        { timeout: 10000, maxBuffer: 20000*1024 },  
-        function(error, stdout, stderr) {
-            response.writeHead(200, {"Content-Type": "text/plain"});
-            let time = new Date();
-            response.write("hello start: " + time);
-            response.end();
+    response.writeHead(200, {"Cotent-Type": "text/plain"} );
+    fs.readFile("./www/home.html", function(err, data){
+        if(err){
+            throw err;
+        }else{
+            response.write(data);
+        }
+        response.end();
     });
+    
 }
-function upload(response){
+function upload(response, url){
     console.log("Request handler 'upload' was called!");
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.write("Hello Upload!");
