@@ -45,4 +45,31 @@
         ` fs.watch("./www", function(data){
             console.log("被修改了："+ data);
         }); `
+
+
+
+***
+
+#### (2)http模块和url模块
+    `
+    const http = require("http"); //获取http模块  
+    const url = require("url");
+    //定义回调函数
+    function start(){
+        function onRequest(request, response) {
+            let pathName = url.parse(request.url).pathname; //获取url路径
+            response.writeHead("Content-Type": "text/plain");   //设置响应头
+            response.write("Hello World!"); //相应主体
+            response.end(); //完成响应  
+       
+        }   
+        http.createServer(onRequest).listen(8888);  //调用http模块的createServer函数创建服务器并监听端口    
+        console.log("Server has started.");
+    }
+    
+    exports.start = start;  //出口
+
+    `
+#### (3)定义router模块和requestHandlers模块
+
             

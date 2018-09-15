@@ -8,10 +8,7 @@ function start(response) {
         function(error, stdout, stderr) {
             response.writeHead(200, {"Content-Type": "text/plain"});
             let time = new Date();
-            while(new Date() - time>10000){
-                response.write("hello start");
-                console.log(1111);
-            }
+            response.write("hello start: " + time);
             response.end();
     });
 }

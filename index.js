@@ -1,4 +1,4 @@
-const server = require("./http");
+const server = require("./server");
 const router = require("./router");
 const requestHandlers = require("./requestHandlers");
 
