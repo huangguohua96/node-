@@ -3,7 +3,6 @@ const fs = require("fs");
 function start(response, url) {
     console.log("Request handler 'start' was called!");
     console.log(url.query)
-
     response.writeHead(200, {"Cotent-Type": "text/plain"} );
     fs.readFile("./www/home.html", function(err, data){
         if(err){

@@ -90,6 +90,102 @@
     })
     `
 
+#### (6)require、module.exports、exports模块
+    ` require()   //引入其他模块  
+    exports.a = 10  //输出
+    module.exports = {a: 10}    //批量输出
+    `
+
+## npm 管理工具
+    npm init 初始化项目，生成package.json文件
+    npm login 登录
+    npm publish 发布自己的模块
+    npm --force unpublish   下线自己的模块
 
 
-            
+## express框架
+    `
+    1.安装： npm install express  
+    2.引入模块: const express = require("express");    
+    3.创建服务：const server = express();
+    4.监听：server.listen(8888);
+    5.处理请求： server.use('url', function(req, res) {});  //接收POST 和get 请求
+                server.get(...) //接收get请求
+                server.post(...)    //接收POST请求
+
+    非侵入式   
+    req   
+
+    原生：res.write()   
+    express: res.send()    //可以直接发送json   
+    `
+### express中间件
+#### express-static插件
+    安装： npm install express-static
+    引入模块：const expressStatic = require("express-static");
+    使用： server.use(expressStatic('./www'));  //监听www文件目录，（访问www下的文件时，会直接访问该文件）
+
+### express 框架获取数据
+
+    GET请求方式： req.query;    //不需要中间件处理
+
+    POST请求方式：req.body  //需要中间件“body-parser”处理
+        const bodyParser = require("body-Parser");
+        server.use(bodyParser.urlEncoded({
+            extended: true, //拓展模式
+            limit: 100*1024,    //限制（默认100K） 
+        }))
+        server.use("/", function(req, res) {  req.body  })
+    同时中间件可以自己写：
+    const querystring = require("querystring"); //引入原生模块
+    server.use("/", function(req, res, next){
+        var str = "";
+        req.on("data", function(data) { str =+ data;});
+        req.on("end", function() {
+            req.body = querystring.parse(str);
+
+            next(); //继续执行下一步
+        })
+    })
+
+### 链式操作
+    server.use("/", function(req, res, next){
+        ...
+        next(); //进行下一步操作
+     })
+
+    server.use("/", function(req, res, next){ ... })
+
+#### cookie 和 session
+
+    在项目中安装和导入模块
+    ` npm install --svae-dev cookie-parser cookie-session`   
+    `
+    const express = require("express");
+    const expressStatic = require("expressStatic");
+
+    const cookieParser = require("cookie-parser");  //用于cookie签名
+    const cookieSession = require("cookie-session");    //使用session
+
+    const server = express();
+    server.listen(8080);
+
+    server.use(cookieParser("签名key"));     //用于cookie签名，需要使用session时也要提前使用
+    server.use(cookieSession({
+        maxAge : 20*1000,    //生存时间
+        keys: ["aaa", "bbb", "ccc", "ddd"]  //
+    }));
+
+    server.use("/", function(req, res, next){
+        res.cookie("key", "value", {maxAge: 200*1000, signed: true, path: "/"});    //发送经过签名cookie
+        res.cookie("key1", "value1", {maxAge: 200*1000000, path: "/"}); //发送未签名的cookie
+
+        console.log(req.cookies) //访问未签名的cookie
+        console.log(req.signedCookies)  //访问经过签名的cookie
+
+        req.session.a = value;  //定义session
+
+        console.log(req.session)  //访问session
+    })
+    `
+
